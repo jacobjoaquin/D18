@@ -88,7 +88,8 @@ void bar() {
 
 int cycleDisorientIndex = 0;
 void cycleDisorient() {
-  int position = random(ledsPerStrip);
+//  int position = random(ledsPerStrip);
+  int position = ledsPerStrip / 2 - 10;
   uint32_t color = random(2) ? pink : orange;
     int direction = random(2) ? 1 : -1;
   int length = random(1, 3);
@@ -97,12 +98,13 @@ void cycleDisorient() {
   char c = foo[cycleDisorientIndex];
   cycleDisorientIndex = (cycleDisorientIndex + 1) % 9;
   uint8_t w = disorientFont2017Widths[(int) c];
+  int nFrames = random(60, 100);
   for (int y = 0; y < 8; ++y) {
     uint16_t letter = disorientFont2017[c][y];
     for (int x = 0; x < w; x++) {
       int thisX = x;
       if ((letter >> (15 - x)) & 1) {
-        createAgent((position + thisX * 3) + y * ledsPerStrip, length, direction, color, random(60, 150));
+        createAgent((position + thisX * 3) + y * ledsPerStrip, length, direction, color, nFrames + random(1, 50));
       }
     }
   }

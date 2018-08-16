@@ -70,7 +70,7 @@ struct Agent {
 const int ledsPerStrip = 150;
 const int nStrips = 8;
 const int nLeds = ledsPerStrip * nStrips;
-const int frameRate = 60;
+const int frameRate = 30;
 const int frameDelay = 1000 / frameRate;
 
 // Octows2811 Setup
@@ -128,7 +128,7 @@ void loop() {
 //    foo();
   }
 
-  if (!(frame % 60)) {
+  if (!(frame % 120)) {
     cycleDisorient();
   }
 //  int r = random(100);
