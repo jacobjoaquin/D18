@@ -1,7 +1,44 @@
+// New random seed based on analogRead0 and analogRead1
+void setupRandomSeed() {
+  auto r0 = analogRead(0) + analogRead(1) + 1;
+  uint32_t r1 = 0;
+  for (uint32_t i = 0; i < r0; i++) {
+    r1 += analogRead(0) + analogRead(1) + analogRead(2);
+  }
+  randomSeed(r1);
+}
+
+
+// Display the current LED Buffer
+void displayLEDs() {
+  if (millis() > sanityNextSwitch) {
+    sanityLED = !sanityLED;
+    digitalWrite(sanityPin, sanityLED);
+    sanityNextSwitch = millis() + sanityDelay;
+  }
+  while (millis() < showTime) {}
+  leds.show();
+  showTime = millis() + frameDelay;
+}
+
 // Clear all the pixels
 void clear() {
   for (int i = 0; i < nLeds; i++) {
     leds.setPixel(i, 0);
+  }
+}
+
+// Buffer to LEDs
+void bufferToLEDs() {
+  uint32_t * bufferPtr = buffer;
+
+  // Add additional agent
+  for (int i = 0; i < nLeds; i++) {
+    uint32_t c = *bufferPtr;
+    int amt = random(256);
+    c = lerpColor(0, c, amt);
+    leds.setPixel(i, c);
+    bufferPtr++;
   }
 }
 

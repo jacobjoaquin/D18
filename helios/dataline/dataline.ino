@@ -1,5 +1,5 @@
 /*
-  shimmer.ino
+  dataline.ino
   Coded by Jacob Joaquin.
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -102,177 +102,19 @@ int agentIndex = 0;
 ulong showTime = millis() + frameDelay;
 uint32_t frame = 0;
 
-void initAgentList() {
-  struct Agent * zPtr = agentList;
-  for (int i = 0; i < nAgents; i++) {
-    zPtr->position = 0;
-    zPtr->length = agentLength;
-    zPtr->direction = 0;
-    zPtr->color = black;
-    zPtr->framesLeft = 0;
-    zPtr++;
-  }
-}
-
-void newAgent() {
-  Agent * zPtr = &agentList[agentIndex];
-  zPtr->position = random(nLeds);
-  zPtr->direction = random(2) ? 1 : -1;
-  zPtr->framesLeft = agentFrames;
-  zPtr->length = random(1, 8);
-  //  zPtr->color = white;
-  zPtr->color = random(2) == 0 ? pink : orange;
-
-  uint32_t r = random(100);
-  if (r < 45) {
-    zPtr->color = pink;
-  } else if (r < 90) {
-    zPtr->color = orange;
-  } else {
-    zPtr->color = white;
-  }
-
-  agentIndex = (agentIndex + 1) % nAgents;
-}
-
-void createAgent(int position, int length, int direction, uint32_t color, int frames) {
-  //    int position;
-  //  int length;
-  //  int direction;
-  //  uint32_t color;
-  //  int framesLeft;
-
-  Agent * zPtr = &agentList[agentIndex];
-  zPtr->position = position;
-  zPtr->length = length;
-  zPtr->direction = direction;
-  zPtr->framesLeft = frames;
-  zPtr->color = color;
-
-  agentIndex = (agentIndex + 1) % nAgents;
-}
-
-void foo() {
-  //  createAgent(random(nLeds), random(1, 8), 1, pink, agentFrames);
-  int position = random(ledsPerStrip);
-  uint32_t color = random(2) ? pink : orange;
-  int direction = random(2) ? 1 : -1;
-  int length = random(1, 8);
-  if (random(100) < 10) {
-    direction *= 4;
-  }
-  for (int i = 0; i < nStrips; i++) {
-    createAgent(position + i * ledsPerStrip, length, direction, color, agentFrames);
-  }
-}
-
-void bar() {
-  //  createAgent(random(nLeds), random(1, 8), 1, pink, agentFrames);
-  int position = random(ledsPerStrip);
-  uint32_t color = random(2) ? pink : orange;
-  if (random(100) < 5) {
-    color = white;
-  }
-  int direction = random(2) ? 1 : -1;
-  int length = random(1, 8);
-
-  //  int offset = length * (random(2) ? 1 : -1);
-  int offset = random(-8, 8);
-
-  if (random(100) < 10) {
-    direction *= 4;
-  }
-  for (int i = 0; i < nStrips; i++) {
-    createAgent(position + i * ledsPerStrip + i * offset, length, direction, color, agentFrames);
-  }
-}
-
-void baz() {
-  int position = random(ledsPerStrip);
-  uint32_t color = random(2) ? pink : orange;
-    int direction = random(2) ? 1 : -1;
-  int length = random(1, 3);
-  String foo = "disorient";
-  
-  char c = foo[random(9)];
-  uint8_t w = disorientFont2017Widths[(int) c];
-  for (int y = 0; y < 8; ++y) {
-    uint16_t letter = disorientFont2017[c][y];
-    for (int x = 0; x < w; x++) {
-      int thisX = x;
-      if ((letter >> (15 - x)) & 1) {
-        createAgent((position + thisX * 3) + y * ledsPerStrip, length, direction, color, agentFrames);
-      }
-    }
-  }
-}
-
-
-void updateAgents() {
-  struct Agent * zPtr = agentList;
-  for (int i = 0; i < nAgents; i++) {
-    if (zPtr->framesLeft > 0) {
-      zPtr->framesLeft--;
-      zPtr->position += zPtr->direction;
-      uint32_t c = lerpColor(zPtr->color, 0, float(zPtr->framesLeft) / (float) agentFrames);
-      int length = zPtr->length;
-      int position = zPtr->position;
-
-      for (int j = 0; j < length; j++) {
-        int index = position + j;
-        index += nLeds * (index < 0);
-        index -= nLeds * (index >= nLeds);
-        buffer[index] = c;
-      }
-    }
-    zPtr++;
-  }
-}
-
-
-void bufferToLEDs() {
-  uint32_t * bufferPtr = buffer;
-
-  // Add additional agent
-  for (int i = 0; i < nLeds; i++) {
-    uint32_t c = *bufferPtr;
-    int amt = random(256);
-    c = lerpColor(0, c, amt);
-    leds.setPixel(i, c);
-    bufferPtr++;
-  }
-}
-
-void setupRandomSeed() {
-  auto r0 = analogRead(0) + analogRead(1) + 1;
-  uint32_t r1 = 0;
-  for (uint32_t i = 0; i < r0; i++) {
-    r1 += analogRead(0) + analogRead(1) + analogRead(2);
-  }
-  randomSeed(r1);
-}
-
 void setup() {
   setupRandomSeed();
-
-  
-  initAgentList();
-  leds.begin();
   pinMode(sanityPin, OUTPUT);
   digitalWrite(sanityPin, sanityLED);
   sanityNextSwitch = millis() + sanityDelay;
+  initAgentList();
+  leds.begin();
 }
 
 
 void loop() {
   memset(&buffer[0], 0, sizeof(buffer));
   clear();
-  //  newAgent();
-  //  newAgent();
-  //  newAgent();
-  //  newAgent();
-
-
 
   int r = random(100);
   if (r < 90) {
@@ -283,25 +125,10 @@ void loop() {
   } else if (r < 96) {
     baz();
   }
-
-  //  if (frame % (frameRate * 1) == 0) {
-  //    foo();
-  //  }
-
+  
   updateAgents();
   bufferToLEDs();
   displayLEDs();
   ++frame;
 }
 
-
-void displayLEDs() {
-  if (millis() > sanityNextSwitch) {
-    sanityLED = !sanityLED;
-    digitalWrite(sanityPin, sanityLED);
-    sanityNextSwitch = millis() + sanityDelay;
-  }
-  while (millis() < showTime) {}
-  leds.show();
-  showTime = millis() + frameDelay;
-}
