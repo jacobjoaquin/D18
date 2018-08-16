@@ -53,11 +53,24 @@
 // Combine rbg values to color
 #define rgb(R, G, B)  ((((uint32_t)(R)) << 16) | (((uint32_t)(G)) << 8) | ((uint32_t)(B)))
 
+// Agent
+struct Agent {
+  float position;
+  int length;
+  float direction;
+  uint32_t color;
+  uint8_t framesLeft;
+  uint8_t nFrames;
+};
+
+
+
+
 // Constansts
 const int ledsPerStrip = 150;
 const int nStrips = 8;
 const int nLeds = ledsPerStrip * nStrips;
-const int frameRate = 48;
+const int frameRate = 60;
 const int frameDelay = 1000 / frameRate;
 
 // Octows2811 Setup
@@ -83,15 +96,6 @@ uint32_t sanityDelay = 48;
 uint32_t sanityNextSwitch;
 int sanityPin = 13;
 
-// Agent
-struct Agent {
-  float position;
-  int length;
-  int direction;
-  uint32_t color;
-  int framesLeft;
-};
-
 const int nAgents = 1600;
 Agent agentList[nAgents];
 int agentLength = 5;
@@ -116,16 +120,20 @@ void loop() {
   memset(&buffer[0], 0, sizeof(buffer));
   clear();
 
-  int r = random(100);
-  if (r < 90) {
+  if (!(frame % 4)) {
     newAgent();
-  } else if (r < 95) {
-        foo();
-        bar();
-  } else if (r < 96) {
-    baz();
   }
-  
+
+//  int r = random(100);
+//  if (r < 90) {
+//    newAgent();
+//  } else if (r < 95) {
+//    foo();
+//    bar();
+//  } else if (r < 96) {
+//    baz();
+//  }
+
   updateAgents();
   bufferToLEDs();
   displayLEDs();

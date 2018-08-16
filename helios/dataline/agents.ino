@@ -1,3 +1,4 @@
+
 // Default values for all agents
 void initAgentList() {
   struct Agent * zPtr = agentList;
@@ -12,10 +13,13 @@ void initAgentList() {
 }
 
 void newAgent() {
+  float speed = random(2) ? 1 : 0.5;
+  
   Agent * zPtr = &agentList[agentIndex];
   zPtr->position = random(nLeds);
-  zPtr->direction = random(2) ? 1 : -1;
-  zPtr->framesLeft = agentFrames;
+  zPtr->direction = (random(2) ? 1 : -1) * speed;
+  zPtr->framesLeft = 40 / speed;
+  zPtr->nFrames = 40 / speed;
   zPtr->length = random(1, 8);
   //  zPtr->color = white;
   zPtr->color = random(2) == 0 ? pink : orange;
@@ -111,7 +115,8 @@ void updateAgents() {
     if (zPtr->framesLeft > 0) {
       zPtr->framesLeft--;
       zPtr->position += zPtr->direction;
-      uint32_t c = lerpColor(zPtr->color, 0, float(zPtr->framesLeft) / (float) agentFrames);
+      uint32_t c = lerpColor(zPtr->color, 0, float(zPtr->framesLeft) / (float) zPtr->nFrames);
+//      uint32_t c = zPtr->color;
       int length = zPtr->length;
       int position = zPtr->position;
 
