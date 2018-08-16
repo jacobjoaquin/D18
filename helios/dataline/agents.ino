@@ -104,11 +104,12 @@ void createAgent(int position, int length, float direction, uint8_t color, int f
 int cycleDisorientIndex = 0;
 void cycleDisorient() {
   //  int position = random(ledsPerStrip);
-  int position = ledsPerStrip / 2 - 5;
+  int position = ledsPerStrip / 2 - 20;
   uint8_t color = random(2) ? pink : orange;
 //  uint8_t color = white;
   int direction = random(2) ? 1 : -1;
   int length = random(1, 4);
+  length = 1;
   String foo = "disorient  ";
   
 
@@ -123,7 +124,7 @@ void cycleDisorient() {
     for (int x = 0; x < w; x++) {
       int thisX = x;
       if ((letter >> (15 - x)) & 1) {
-        createAgent((position + thisX * 4) + stripOffset, length, direction * 0.5, color, (nFrames + random(1, 50)) * 2);
+        createAgent((position + thisX * 4) + stripOffset, length, direction, color, nFrames + random(1, 50));
       }
     }
   }
