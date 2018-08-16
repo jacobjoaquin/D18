@@ -32,13 +32,9 @@ void clear() {
 void bufferToLEDs() {
   uint32_t * bufferPtr = buffer;
 
-  // Add additional agent
   for (int i = 0; i < nLeds; i++) {
-    uint32_t c = *bufferPtr;
-    int amt = random(256);
-    c = lerpColor(0, c, amt);
-    leds.setPixel(i, c);
-    bufferPtr++;
+    leds.setPixel(i, *bufferPtr);
+    ++bufferPtr;
   }
 }
 

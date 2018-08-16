@@ -56,7 +56,7 @@
 // Agent
 struct Agent {
   float position;
-  int length;
+  uint8_t length;
   float direction;
   uint32_t color;
   uint8_t framesLeft;
@@ -118,12 +118,19 @@ void setup() {
 
 void loop() {
   memset(&buffer[0], 0, sizeof(buffer));
-  clear();
+//  clear();
 
   if (!(frame % 4)) {
     newAgent();
   }
 
+  if (random(100) < 2) {
+//    foo();
+  }
+
+  if (!(frame % 60)) {
+    cycleDisorient();
+  }
 //  int r = random(100);
 //  if (r < 90) {
 //    newAgent();

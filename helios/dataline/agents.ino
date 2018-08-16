@@ -13,13 +13,16 @@ void initAgentList() {
 }
 
 void newAgent() {
-  float speed = random(2) ? 1 : 0.5;
+  float speed = (random(4) + 1) / 4.0;
+//  float speed = random(2) ? 1 : 0.5;
+  int nFrames = random(40, 80);
   
   Agent * zPtr = &agentList[agentIndex];
-  zPtr->position = random(nLeds);
+//  zPtr->position = random(nLeds);
+  zPtr->position = ledsPerStrip / 2 + (random(nStrips)) * 150;
   zPtr->direction = (random(2) ? 1 : -1) * speed;
-  zPtr->framesLeft = 40 / speed;
-  zPtr->nFrames = 40 / speed;
+  zPtr->framesLeft = nFrames / speed;
+  zPtr->nFrames = nFrames / speed;
   zPtr->length = random(1, 8);
   //  zPtr->color = white;
   zPtr->color = random(2) == 0 ? pink : orange;
@@ -37,17 +40,12 @@ void newAgent() {
 }
 
 void createAgent(int position, int length, int direction, uint32_t color, int frames) {
-  //    int position;
-  //  int length;
-  //  int direction;
-  //  uint32_t color;
-  //  int framesLeft;
-
   Agent * zPtr = &agentList[agentIndex];
   zPtr->position = position;
   zPtr->length = length;
   zPtr->direction = direction;
   zPtr->framesLeft = frames;
+  zPtr->nFrames = frames;
   zPtr->color = color;
 
   agentIndex = (agentIndex + 1) % nAgents;
@@ -88,21 +86,23 @@ void bar() {
   }
 }
 
-void baz() {
+int cycleDisorientIndex = 0;
+void cycleDisorient() {
   int position = random(ledsPerStrip);
   uint32_t color = random(2) ? pink : orange;
     int direction = random(2) ? 1 : -1;
   int length = random(1, 3);
   String foo = "disorient";
   
-  char c = foo[random(9)];
+  char c = foo[cycleDisorientIndex];
+  cycleDisorientIndex = (cycleDisorientIndex + 1) % 9;
   uint8_t w = disorientFont2017Widths[(int) c];
   for (int y = 0; y < 8; ++y) {
     uint16_t letter = disorientFont2017[c][y];
     for (int x = 0; x < w; x++) {
       int thisX = x;
       if ((letter >> (15 - x)) & 1) {
-        createAgent((position + thisX * 3) + y * ledsPerStrip, length, direction, color, agentFrames);
+        createAgent((position + thisX * 3) + y * ledsPerStrip, length, direction, color, random(60, 150));
       }
     }
   }
