@@ -83,12 +83,15 @@ uint32_t colorMagenta = rgb(255, 0, 92);
 uint32_t colorBlack = rgb(0, 0, 0);
 uint32_t colorWhite = rgb(255, 255, 255);
 uint32_t colorPink = rgb(128, 0, 64);
+uint32_t colorCyan = rgb(0, 255, 255);
 
 const uint8_t black = 0;
 const uint8_t orange = 1;
 const uint8_t pink = 2;
 const uint8_t white = 3;
-uint32_t palette[4] = {colorBlack, colorOrange, colorPink, colorWhite};
+const uint8_t magenta = 4;
+const uint8_t cyan = 5;
+uint32_t palette[] = {colorBlack, colorOrange, colorPink, colorWhite, colorMagenta, colorCyan};
 
 
 // LED Buffer
@@ -167,7 +170,11 @@ void loop() {
     for (int i = start; i < start + nFlicker; ++i) {
       int index = i % nLeds;
       if (buffer[index] >= 1) {
-        buffer[index] = palette[white];
+        if (random(100) < 90) {
+          buffer[index] = palette[white];
+        } else {
+          buffer[index] = palette[cyan];          
+        }
       }
     }
   }
