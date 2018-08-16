@@ -58,7 +58,7 @@ struct Agent {
   float position;
   uint8_t length;
   float direction;
-  uint32_t color;
+  uint8_t color;
   uint8_t framesLeft;
   uint8_t nFrames;
 };
@@ -78,11 +78,17 @@ const int config = WS2811_GRB | WS2811_800kHz;
 OctoWS2811 leds(ledsPerStrip, displayMemory, drawingMemory, config);
 
 // User defined variables
-uint32_t orange = rgb(255, 64, 0);
-uint32_t magenta = rgb(255, 0, 92);
-uint32_t black = rgb(0, 0, 0);
-uint32_t white = rgb(255, 255, 255);
-uint32_t pink = rgb(128, 0, 64);
+uint32_t colorOrange = rgb(255, 64, 0);
+uint32_t colorMagenta = rgb(255, 0, 92);
+uint32_t colorBlack = rgb(0, 0, 0);
+uint32_t colorWhite = rgb(255, 255, 255);
+uint32_t colorPink = rgb(128, 0, 64);
+
+const uint8_t black = 0;
+const uint8_t orange = 1;
+const uint8_t pink = 2;
+const uint8_t white = 3;
+uint32_t palette[4] = {colorBlack, colorOrange, colorPink, colorWhite};
 
 
 // LED Buffer
