@@ -1,6 +1,6 @@
 // New random seed based on analogRead0 and analogRead1
 void setupRandomSeed() {
-  auto r0 = analogRead(0) + analogRead(1) + 1;
+  uint32_t r0 = analogRead(0) + analogRead(1) + 1;
   uint32_t r1 = 0;
   for (uint32_t i = 0; i < r0; i++) {
     r1 += analogRead(0) + analogRead(1) + analogRead(2);
@@ -33,7 +33,11 @@ void bufferToLEDs() {
   uint32_t * bufferPtr = buffer;
 
   for (int i = 0; i < nLeds; i++) {
-    leds.setPixel(i, *bufferPtr);
+    uint32_t c = *bufferPtr;
+    uint8_t r = randomBuffer[i];
+    c = lerpColor(0, c, r);
+//    leds.setPixel(i, *bufferPtr);
+    leds.setPixel(i, c);
     ++bufferPtr;
   }
 }

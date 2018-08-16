@@ -63,14 +63,12 @@ struct Agent {
   uint8_t nFrames;
 };
 
-
-
-
+uint8_t stripOrder[] = {0, 1, 2, 3, 7, 6, 5, 4};
 // Constansts
 const int ledsPerStrip = 150;
 const int nStrips = 8;
 const int nLeds = ledsPerStrip * nStrips;
-const int frameRate = 30;
+const int frameRate = 60;
 const int frameDelay = 1000 / frameRate;
 
 // Octows2811 Setup
@@ -89,6 +87,10 @@ uint32_t pink = rgb(128, 0, 64);
 
 // LED Buffer
 uint32_t buffer[nLeds] = {0};
+
+// Random buffer
+uint8_t randomBuffer[nLeds] = {0};
+
 
 // Sanity led
 boolean sanityLED = true;
@@ -119,6 +121,12 @@ void setup() {
 void loop() {
   memset(&buffer[0], 0, sizeof(buffer));
 //  clear();
+
+  if (!(frame % 4)) {
+    for (int i = 0; i < nLeds; ++i) {
+      randomBuffer[i] = random(256);
+    }
+  }
 
   if (!(frame % 4)) {
     newAgent();
