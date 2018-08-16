@@ -138,15 +138,19 @@ void loop() {
     }
   }
 
-  if (!(frame % 4)) {
-    newAgent();
+//  if (!(frame % 4)) {
+//    newAgent();
+//  }
+
+  if (!(frame % 8)) {
+    newMirroredAgent();
   }
 
   if (random(100) < 2) {
     //    foo();
   }
 
-  if (!(frame % 120)) {
+  if (!(frame % 240)) {
     cycleDisorient();
   }
   //  int r = random(100);
