@@ -63,12 +63,18 @@ struct Agent {
   uint8_t nFrames;
 };
 
-uint8_t stripOrder[] = {0, 1, 2, 3, 7, 6, 5, 4};
+
+
+
+// User-defined
+const int frameRate = 60;
+
+
 // Constansts
+const uint8_t stripOrder[] = {0, 1, 2, 3, 7, 6, 5, 4};
 const int ledsPerStrip = 150;
 const int nStrips = 8;
 const int nLeds = ledsPerStrip * nStrips;
-const int frameRate = 60;
 const int frameDelay = 1000 / frameRate;
 
 // Octows2811 Setup
@@ -78,7 +84,7 @@ const int config = WS2811_GRB | WS2811_800kHz;
 OctoWS2811 leds(ledsPerStrip, displayMemory, drawingMemory, config);
 
 // User defined variables
-uint32_t colorOrange = rgb(255, 64, 0);
+uint32_t colorOrange = rgb(255, 48, 0);
 uint32_t colorMagenta = rgb(255, 0, 92);
 uint32_t colorBlack = rgb(0, 0, 0);
 uint32_t colorWhite = rgb(255, 255, 255);
@@ -138,32 +144,22 @@ void loop() {
     }
   }
 
+  // Individual agents
 //  if (!(frame % 4)) {
 //    newAgent();
 //  }
 
+  // Mirrored Agents
   if (!(frame % 8)) {
     newMirroredAgent();
   }
 
-  if (random(100) < 2) {
-    //    foo();
-  }
-
+  // Disorient
   if (!(frame % 240)) {
     cycleDisorient();
   }
-  //  int r = random(100);
-  //  if (r < 90) {
-  //    newAgent();
-  //  } else if (r < 95) {
-  //    foo();
-  //    bar();
-  //  } else if (r < 96) {
-  //    baz();
-  //  }
 
-
+  // Update the agents
   updateAgents();
 
 
@@ -174,7 +170,7 @@ void loop() {
     for (int i = start; i < start + nFlicker; ++i) {
       int index = i % nLeds;
       if (buffer[index] >= 1) {
-        if (random(100) < 90) {
+        if (random(100) < 60) {
           buffer[index] = palette[white];
         } else {
           buffer[index] = palette[cyan];          
@@ -183,11 +179,8 @@ void loop() {
     }
   }
 
+  // Last
   bufferToLEDs();
-
-
-
-  
   displayLEDs();
   ++frame;
 }

@@ -110,7 +110,7 @@ void cycleDisorient() {
   int direction = random(2) ? 1 : -1;
   int length = random(1, 4);
   length = 1;
-  String foo = "disorient  ";
+  String foo = "disorient     ";
   
 
   char c = foo[cycleDisorientIndex];
