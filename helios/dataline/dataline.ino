@@ -56,12 +56,10 @@
 
 /*
   TODO:
-  random seed
   shapes:
   Chevron
   slashes
   bars
-  letters
   Try stationary agents
   Color Mixing?
   Black Pixels

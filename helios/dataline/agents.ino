@@ -1,7 +1,6 @@
 int agentMode = 0;
 const int agentModeRandom = 0;
 const int agentModeMirrored = 1;
-const int agentModeFoo = 2;
 
 void doAgents() {
   // Random Agents

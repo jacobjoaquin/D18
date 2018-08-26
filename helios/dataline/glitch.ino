@@ -17,18 +17,22 @@ void glitch() {
   }
 
   if (isGlitching) {
+    int shift = random(4);
     if (frame >= nextGlitch && frame < nextGlitch + glitchFrames) {
       int start = ledsPerStrip * glitchStrip;
       int nFlicker = ledsPerStrip;
       for (int i = start; i < start + nFlicker; ++i) {
         int index = i % nLeds;
         if (buffer[index] >= 1) {
-          if (random(100) < 60) {
-            buffer[index] = palette[white];
-          } else {
-            buffer[index] = palette[yellow];
+        uint32_t thisColor = palette[white];
+
+          if (random(100) < 40) {
+            thisColor = palette[yellow];
           }
+          thisColor = shiftColor(thisColor, shift);
+          buffer[index] = thisColor;
         }
+        
       }
     } else {
       if (frame >= nextGlitch + glitchFrames) {
