@@ -128,6 +128,8 @@ const uint8_t yellow = 6;
 uint32_t palette[] = {colorBlack, colorOrange, colorPink, colorWhite, colorMagenta, colorCyan, colorYellow};
 
 
+int letterSpacing = 8;
+
 // LED Buffer
 uint32_t buffer[nLeds] = {0};
 

@@ -99,6 +99,11 @@ void cycleDisorient() {
   length = 1;
   String disorient = "disorient     ";
 
+  if (direction == 1) {
+    position -= ledsPerStrip / 3;
+  } else {
+    position += ledsPerStrip / 3;
+  }
 
   char c = disorient[cycleDisorientIndex];
   cycleDisorientIndex = (cycleDisorientIndex + 1) % disorient.length();
@@ -111,7 +116,7 @@ void cycleDisorient() {
     for (int x = 0; x < w; x++) {
       int thisX = x;
       if ((letter >> (15 - x)) & 1) {
-        createAgent((position + thisX * 4) + stripOffset, length, direction, color, nFrames + random(1, 50));
+        createAgent((position + thisX * letterSpacing) + stripOffset, length, direction, color, nFrames + random(1, 50));
       }
     }
   }
