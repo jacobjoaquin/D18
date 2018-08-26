@@ -94,7 +94,7 @@ const int frameRate = 60;
 
 
 // Constansts
-    
+
 
 //const uint8_t stripOrder[] = {0, 1, 2, 3, 7, 6, 5, 4};
 const uint8_t stripOrder[] = {3, 1, 2, 0, 4, 6, 5, 7};
@@ -163,47 +163,12 @@ void loop() {
   // Reset temporary buffer
   memset(&buffer[0], 0, sizeof(buffer));
 
-  // Fill randomBuffer with noise
   if (!(frame % 4)) {
     for (int i = 0; i < nLeds; ++i) {
-      randomBuffer[i] = random(256);
+      buffer[i] = palette[pink]`;
     }
   }
 
-  // Individual agents
-//  if (!(frame % 4)) {
-//    newAgent();
-//  }
-
-  // Mirrored Agents
-  if (!(frame % 8)) {
-    newMirroredAgent();
-  }
-
-  // Disorient
-  if (!(frame % 240)) {
-    cycleDisorient();
-  }
-
-  // Update the agents
-  updateAgents();
-
-
-    // Random strip flick
-  if (!(frame % 12)) {
-    int start = ledsPerStrip * random(nStrips);
-    int nFlicker = ledsPerStrip;
-    for (int i = start; i < start + nFlicker; ++i) {
-      int index = i % nLeds;
-      if (buffer[index] >= 1) {
-        if (random(100) < 60) {
-          buffer[index] = palette[white];
-        } else {
-          buffer[index] = palette[cyan];          
-        }
-      }
-    }
-  }
 
   // Last
   bufferToLEDs();
