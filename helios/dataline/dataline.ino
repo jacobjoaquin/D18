@@ -116,6 +116,7 @@ uint32_t colorBlack = rgb(0, 0, 0);
 uint32_t colorWhite = rgb(255, 255, 255);
 uint32_t colorPink = rgb(128, 0, 64);
 uint32_t colorCyan = rgb(0, 255, 255);
+uint32_t colorYellow = rgb(255, 255, 128);
 
 const uint8_t black = 0;
 const uint8_t orange = 1;
@@ -123,7 +124,8 @@ const uint8_t pink = 2;
 const uint8_t white = 3;
 const uint8_t magenta = 4;
 const uint8_t cyan = 5;
-uint32_t palette[] = {colorBlack, colorOrange, colorPink, colorWhite, colorMagenta, colorCyan};
+const uint8_t yellow = 6;
+uint32_t palette[] = {colorBlack, colorOrange, colorPink, colorWhite, colorMagenta, colorCyan, colorYellow};
 
 
 // LED Buffer
@@ -175,10 +177,8 @@ void loop() {
 //    newAgent();
 //  }
 
-  // Mirrored Agents
-  if (!(frame % 8)) {
-    newMirroredAgent();
-  }
+  // Agents
+  doAgents();
 
   // Disorient
   if (!(frame % 240)) {
@@ -189,22 +189,9 @@ void loop() {
   updateAgents();
 
 
-    // Random strip flick
-  if (!(frame % 12)) {
-    int start = ledsPerStrip * random(nStrips);
-    int nFlicker = ledsPerStrip;
-    for (int i = start; i < start + nFlicker; ++i) {
-      int index = i % nLeds;
-      if (buffer[index] >= 1) {
-        if (random(100) < 60) {
-          buffer[index] = palette[white];
-        } else {
-          buffer[index] = palette[cyan];          
-        }
-      }
-    }
-  }
-
+  // Glitch
+  glitch();
+  
   // Last
   bufferToLEDs();
   displayLEDs();
