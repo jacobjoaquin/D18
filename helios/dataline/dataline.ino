@@ -94,7 +94,7 @@ const int frameRate = 60;
 
 
 // Constansts
-    
+
 
 //const uint8_t stripOrder[] = {0, 1, 2, 3, 7, 6, 5, 4};
 const uint8_t stripOrder[] = {3, 1, 2, 0, 4, 6, 5, 7};
@@ -172,11 +172,6 @@ void loop() {
     }
   }
 
-  // Individual agents
-//  if (!(frame % 4)) {
-//    newAgent();
-//  }
-
   // Agents
   doAgents();
 
@@ -191,7 +186,7 @@ void loop() {
 
   // Glitch
   glitch();
-  
+
   // Last
   bufferToLEDs();
   displayLEDs();

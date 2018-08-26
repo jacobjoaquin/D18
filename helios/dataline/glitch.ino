@@ -37,18 +37,4 @@ void glitch() {
     }
   }
 }
-//  if (!(frame % 12)) {
-//    int start = ledsPerStrip * random(nStrips);
-//    int nFlicker = ledsPerStrip;
-//    for (int i = start; i < start + nFlicker; ++i) {
-//      int index = i % nLeds;
-//      if (buffer[index] >= 1) {
-//        if (random(100) < 60) {
-//          buffer[index] = palette[white];
-//        } else {
-//          buffer[index] = palette[cyan];
-//        }
-//      }
-//    }
-//  }
 

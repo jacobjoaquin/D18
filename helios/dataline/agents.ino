@@ -1,28 +1,24 @@
 int agentMode = 0;
 const int agentModeRandom = 0;
 const int agentModeMirrored = 1;
-
+const int agentModeFoo = 2;
 
 void doAgents() {
-  if (frame >= nextAgentMode) {
-    agentMode = random(2);
-  }
-
+  // Random Agents
   if (agentMode == agentModeRandom) {
     // Mirrored Agents
     if (!(frame % 4)) {
       newAgent();
+      agentMode = random(2);
     }
 
-  } else if (agentMode == agentModeMirrored) {
-    // Mirrored Agents
+  }
+  // Mirrored Agents
+  else if (agentMode == agentModeMirrored) {
     if (!(frame % 4)) {
       newMirroredAgent();
+      agentMode = random(2);
     }
-  }
-
-  if (random(100) == 0) {
-    agentMode = random(2);
   }
 }
 
@@ -92,41 +88,6 @@ void createAgent(int position, int length, float direction, uint8_t color, int f
   agentIndex = (agentIndex + 1) % nAgents;
 }
 
-//void foo() {
-//  //  createAgent(random(nLeds), random(1, 8), 1, pink, agentFrames);
-//  int position = random(ledsPerStrip);
-//  uint8_t color = random(2) ? pink : orange;
-//  int direction = random(2) ? 1 : -1;
-//  int length = random(1, 8);
-//  if (random(100) < 10) {
-//    direction *= 4;
-//  }
-//  for (int i = 0; i < nStrips; i++) {
-//    createAgent(position + i * ledsPerStrip, length, direction, color, agentFrames);
-//  }
-//}
-
-//void bar() {
-//  //  createAgent(random(nLeds), random(1, 8), 1, pink, agentFrames);
-//  int position = random(ledsPerStrip);
-//  uint32_t color = random(2) ? pink : orange;
-//  if (random(100) < 5) {
-//    color = 4;
-//  }
-//  int direction = random(2) ? 1 : -1;
-//  int length = random(1, 8);
-//
-//  //  int offset = length * (random(2) ? 1 : -1);
-//  int offset = random(-8, 8);
-//
-//  if (random(100) < 10) {
-//    direction *= 4;
-//  }
-//  for (int i = 0; i < nStrips; i++) {
-//    createAgent(position + i * ledsPerStrip + i * offset, length, direction, color, agentFrames);
-//  }
-//}
-
 int cycleDisorientIndex = 0;
 void cycleDisorient() {
   //  int position = random(ledsPerStrip);
@@ -136,11 +97,11 @@ void cycleDisorient() {
   int direction = random(2) ? 1 : -1;
   int length = random(1, 4);
   length = 1;
-  String foo = "disorient     ";
+  String disorient = "disorient     ";
 
 
-  char c = foo[cycleDisorientIndex];
-  cycleDisorientIndex = (cycleDisorientIndex + 1) % foo.length();
+  char c = disorient[cycleDisorientIndex];
+  cycleDisorientIndex = (cycleDisorientIndex + 1) % disorient.length();
   uint8_t w = disorientFont2017Widths[(int) c];
   int nFrames = random(60, 100);
   for (int y = 0; y < 8; ++y) {
