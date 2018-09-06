@@ -18,6 +18,7 @@ void displayLEDs() {
   }
   while (millis() < showTime) {}
   leds.show();
+
   showTime = millis() + frameDelay;
 }
 
@@ -30,16 +31,31 @@ void clear() {
 
 // Buffer to LEDs
 void bufferToLEDs() {
-  uint32_t * bufferPtr = buffer;
+  //  uint32_t * bufferPtr = buffer;
+  //
+  //  for (int i = 0; i < nLeds; i++) {
+  //    uint32_t c = *bufferPtr;
+  //    uint8_t r = randomBuffer[i];
+  //    c = lerpColor(0, c, r);
+  //    leds.setPixel(i, c);
+  //    ++bufferPtr;
+  //  }
 
-  for (int i = 0; i < nLeds; i++) {
-    uint32_t c = *bufferPtr;
-    uint8_t r = randomBuffer[i];
-    c = lerpColor(0, c, r);
-//    leds.setPixel(i, *bufferPtr);
-    leds.setPixel(i, c);
-    ++bufferPtr;
+  for (int y = 0; y < 8; y++) {
+    for (int x = 0; x < 96; x++) {
+//      uint32_t c = buffer[y * 150 + x + (150 - 96) / 2];
+      uint32_t c = buffer[y * 150 + x];
+      uint8_t r = randomBuffer[x];
+      c = lerpColor(0, c, r);
+
+      if (x < 96) {
+        leds.setPixel(XY(95 - x, 7 - y), c);
+      } else {
+        leds.setPixel(XY(x, y), c);
+      }
+    }
   }
+
 }
 
 // Interpolate between two colors. amt: [0.0-1.0)

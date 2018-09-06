@@ -74,6 +74,14 @@
 // Combine rbg values to color
 #define rgb(R, G, B)  ((((uint32_t)(R)) << 16) | (((uint32_t)(G)) << 8) | ((uint32_t)(B)))
 
+const int kMatrixHeight = 8;
+const int kMatrixWidth = 96;
+
+int16_t XY(uint8_t x, uint8_t y) {
+  int i = x % 2;
+  return (x + i) * kMatrixHeight - i + (i ? -y : y);
+}
+
 // Agent
 struct Agent {
   float position;
@@ -95,17 +103,28 @@ const int frameRate = 60;
 
 
 //const uint8_t stripOrder[] = {0, 1, 2, 3, 7, 6, 5, 4};
-const uint8_t stripOrder[] = {3, 1, 2, 0, 4, 6, 5, 7};
+//const uint8_t stripOrder[] = {3, 1, 2, 0, 4, 6, 5, 7};
+const uint8_t stripOrder[] = {0, 1, 2, 3, 4, 5, 6, 7};
 const int ledsPerStrip = 150;
 const int nStrips = 8;
 const int nLeds = ledsPerStrip * nStrips;
 const int frameDelay = 1000 / frameRate;
 
+
+// microVersatile Display
+const int displayWidth = 8;
+const int displayHeight = 96;
+const int displayNumLEDs = 8 * 96;
+uint32_t displayBuffer[displayNumLEDs];
+
 // Octows2811 Setup
-DMAMEM int displayMemory[ledsPerStrip * 6];
-int drawingMemory[ledsPerStrip * 6];
+DMAMEM int displayMemory[256 * 6];
+int drawingMemory[256 * 6];
+//DMAMEM int displayMemory[ledsPerStrip * 6];
+//int drawingMemory[ledsPerStrip * 6];
 const int config = WS2811_GRB | WS2811_800kHz;
 OctoWS2811 leds(ledsPerStrip, displayMemory, drawingMemory, config);
+
 
 // User defined variables
 uint32_t colorOrange = rgb(255, 48, 0);
@@ -126,7 +145,8 @@ const uint8_t yellow = 6;
 uint32_t palette[] = {colorBlack, colorOrange, colorPink, colorWhite, colorMagenta, colorCyan, colorYellow};
 
 
-int letterSpacing = 8;
+//int letterSpacing = 8;
+int letterSpacing = 1;
 
 // LED Buffer
 uint32_t buffer[nLeds] = {0};
