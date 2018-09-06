@@ -1,3 +1,9 @@
+int16_t XY(uint16_t x, uint16_t y) {
+  int i = x % 2;
+  return (x + i) * kMatrixHeight - i + (i ? -y : y);
+}
+
+
 // New random seed based on analogRead0 and analogRead1
 void setupRandomSeed() {
   uint32_t r0 = analogRead(0) + analogRead(1) + 1;
@@ -17,17 +23,17 @@ void displayLEDs() {
     sanityNextSwitch = millis() + sanityDelay;
   }
   while (millis() < showTime) {}
-  leds.show();
+  //  leds.show();
 
   showTime = millis() + frameDelay;
 }
 
 // Clear all the pixels
-void clear() {
-  for (int i = 0; i < nLeds; i++) {
-    leds.setPixel(i, 0);
-  }
-}
+//void clear() {
+//  for (int i = 0; i < nLeds; i++) {
+//    leds.setPixel(i, 0);
+//  }
+//}
 
 // Buffer to LEDs
 void bufferToLEDs() {
@@ -41,21 +47,26 @@ void bufferToLEDs() {
   //    ++bufferPtr;
   //  }
 
-  for (int y = 0; y < 8; y++) {
-    for (int x = 0; x < 96; x++) {
-//      uint32_t c = buffer[y * 150 + x + (150 - 96) / 2];
-      uint32_t c = buffer[y * 150 + x];
-      uint8_t r = randomBuffer[x];
-      c = lerpColor(0, c, r);
 
-      if (x < 96) {
-        leds.setPixel(XY(95 - x, 7 - y), c);
+  for (int y = 0; y < kMatrixHeight; ++y) {
+    for (int x = 0; x < kMatrixWidth; ++x) {
+      int index = 0;
+
+      if (x < kMatrixWidth) {
+        index = XY((kMatrixWidth - 1) - x, (kMatrixHeight - 1) - y);
       } else {
-        leds.setPixel(XY(x, y), c);
+        index = XY(x, y);
       }
+
+      uint32_t c = buffer[x + y * kMatrixWidth];
+      uint8_t r = randomBuffer[x + y * kMatrixWidth];
+      c = lerpColor(0, c, r);
+      //      leds.setPixel(i, c);
+
+
+      ledsBuffer[index] = c;
     }
   }
-
 }
 
 // Interpolate between two colors. amt: [0.0-1.0)

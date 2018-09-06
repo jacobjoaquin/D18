@@ -68,19 +68,23 @@
 */
 
 
-#include <OctoWS2811.h>
+//#include <OctoWS2811.h>
+#include <FastLED.h>
+
 #include "disfont2017.h"
 
 // Combine rbg values to color
 #define rgb(R, G, B)  ((((uint32_t)(R)) << 16) | (((uint32_t)(G)) << 8) | ((uint32_t)(B)))
 
-const int kMatrixHeight = 8;
-const int kMatrixWidth = 96;
+#define COLOR_ORDER  GRB
+#define CHIPSET      WS2811
+#define BRIGHTNESS   255
 
-int16_t XY(uint8_t x, uint8_t y) {
-  int i = x % 2;
-  return (x + i) * kMatrixHeight - i + (i ? -y : y);
-}
+const uint8_t STRIP_PIN_0 = 2;
+const uint8_t STRIP_PIN_1 = 7;
+const uint8_t STRIP_PIN_2 = 14;
+
+
 
 // Agent
 struct Agent {
@@ -105,25 +109,31 @@ const int frameRate = 60;
 //const uint8_t stripOrder[] = {0, 1, 2, 3, 7, 6, 5, 4};
 //const uint8_t stripOrder[] = {3, 1, 2, 0, 4, 6, 5, 7};
 const uint8_t stripOrder[] = {0, 1, 2, 3, 4, 5, 6, 7};
-const int ledsPerStrip = 150;
+const int ledsPerStrip = 96;
 const int nStrips = 8;
 const int nLeds = ledsPerStrip * nStrips;
 const int frameDelay = 1000 / frameRate;
 
 
+const int kMatrixHeight = 8;
+const int kMatrixWidth = 96;
+
 // microVersatile Display
-const int displayWidth = 8;
-const int displayHeight = 96;
-const int displayNumLEDs = 8 * 96;
-uint32_t displayBuffer[displayNumLEDs];
+//const int displayWidth = ledsPerStrip;
+//const int displayHeight = nStrips;
+//const int displayNumLEDs = nLeds;
+//uint32_t displayBuffer[displayNumLEDs];
 
 // Octows2811 Setup
-DMAMEM int displayMemory[256 * 6];
-int drawingMemory[256 * 6];
+//DMAMEM int displayMemory[256 * 6];
+//int drawingMemory[256 * 6];
 //DMAMEM int displayMemory[ledsPerStrip * 6];
 //int drawingMemory[ledsPerStrip * 6];
-const int config = WS2811_GRB | WS2811_800kHz;
-OctoWS2811 leds(ledsPerStrip, displayMemory, drawingMemory, config);
+//const int config = WS2811_GRB | WS2811_800kHz;
+//OctoWS2811 leds(ledsPerStrip, displayMemory, drawingMemory, config);
+
+// Fast LED setup
+CRGB ledsBuffer[nLeds + 1];
 
 
 // User defined variables
@@ -152,7 +162,7 @@ int letterSpacing = 1;
 uint32_t buffer[nLeds] = {0};
 
 // Random buffer
-uint8_t randomBuffer[nLeds] = {0};
+uint8_t randomBuffer[nLeds] = {255};
 
 
 // Sanity led
@@ -172,44 +182,64 @@ ulong showTime = millis() + frameDelay;
 uint32_t frame = 0;
 
 void setup() {
+  FastLED.addLeds<CHIPSET, STRIP_PIN_0, COLOR_ORDER>(ledsBuffer, 0, 256).setCorrection(TypicalSMD5050);
+  FastLED.addLeds<CHIPSET, STRIP_PIN_1, COLOR_ORDER>(ledsBuffer,  256,  256).setCorrection(TypicalSMD5050);
+  FastLED.addLeds<CHIPSET, STRIP_PIN_2, COLOR_ORDER>(ledsBuffer, 2 *  256,  256).setCorrection(TypicalSMD5050);
+  FastLED.setBrightness(BRIGHTNESS);
+
   setupRandomSeed();
   pinMode(sanityPin, OUTPUT);
   digitalWrite(sanityPin, sanityLED);
   sanityNextSwitch = millis() + sanityDelay;
   initAgentList();
-  leds.begin();
+  //  leds.begin();
 }
 
+
+int tempIndex = 0;
 
 void loop() {
   // Reset temporary buffer
   memset(&buffer[0], 0, sizeof(buffer));
+  FastLED.clear();
+
+
+  //  buffer[tempIndex] = 0xffffff;
+//  leds.setPixel(tempIndex, 0x888888);
+//  ledsBuffer[tempIndex] = CRGB(80, 80, 80);
+//  ++tempIndex;
+//  tempIndex %= nLeds;
+
+
 
   // Fill randomBuffer with noise
   if (!(frame % 4)) {
     for (int i = 0; i < nLeds; ++i) {
-      randomBuffer[i] = random(256);
+            randomBuffer[i] = random(256);
     }
   }
 
-  // Agents
-  doAgents();
+  //  // Agents
+    doAgents();
+  
+    // Disorient
+    if (!(frame % 240)) {
+      cycleDisorient();
+    }
+  
+    // Update the agents
+    updateAgents();
+  
+  
+    // Glitch
+    glitch();
 
-  // Disorient
-  if (!(frame % 240)) {
-    cycleDisorient();
-  }
-
-  // Update the agents
-  updateAgents();
-
-
-  // Glitch
-  glitch();
 
   // Last
   bufferToLEDs();
   displayLEDs();
+  FastLED.show();
+
   ++frame;
 }
 
