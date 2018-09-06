@@ -52,8 +52,8 @@ void bufferToLEDs() {
     for (int x = 0; x < kMatrixWidth; ++x) {
       int index = 0;
 
-      if (x < kMatrixWidth) {
-        index = XY((kMatrixWidth - 1) - x, (kMatrixHeight - 1) - y);
+      if (x < panelWidth) {
+        index = XY((panelWidth - 1) - x, (panelHeight - 1) - y);
       } else {
         index = XY(x, y);
       }

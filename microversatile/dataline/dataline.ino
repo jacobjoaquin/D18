@@ -117,6 +117,8 @@ const int frameDelay = 1000 / frameRate;
 
 const int kMatrixHeight = 8;
 const int kMatrixWidth = 96;
+const uint8_t panelWidth = 32;
+const uint8_t panelHeight = 8;
 
 // microVersatile Display
 //const int displayWidth = ledsPerStrip;
