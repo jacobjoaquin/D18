@@ -28,26 +28,8 @@ void displayLEDs() {
   showTime = millis() + frameDelay;
 }
 
-// Clear all the pixels
-//void clear() {
-//  for (int i = 0; i < nLeds; i++) {
-//    leds.setPixel(i, 0);
-//  }
-//}
-
 // Buffer to LEDs
 void bufferToLEDs() {
-  //  uint32_t * bufferPtr = buffer;
-  //
-  //  for (int i = 0; i < nLeds; i++) {
-  //    uint32_t c = *bufferPtr;
-  //    uint8_t r = randomBuffer[i];
-  //    c = lerpColor(0, c, r);
-  //    leds.setPixel(i, c);
-  //    ++bufferPtr;
-  //  }
-
-
   for (int y = 0; y < kMatrixHeight; ++y) {
     for (int x = 0; x < kMatrixWidth; ++x) {
       int index = 0;
@@ -61,9 +43,6 @@ void bufferToLEDs() {
       uint32_t c = buffer[x + y * kMatrixWidth];
       uint8_t r = randomBuffer[x + y * kMatrixWidth];
       c = lerpColor(0, c, r);
-      //      leds.setPixel(i, c);
-
-
       ledsBuffer[index] = c;
     }
   }
