@@ -38,15 +38,16 @@ void initAgentList() {
 void newAgent() {
   float speed = (random(4) + 1) / 4.0;
   //  float speed = random(2) ? 1 : 0.5;
-  int nFrames = random(40, 80);
+  int nFrames = random(120, 480);
 
   Agent * zPtr = &agentList[agentIndex];
   //  zPtr->position = random(nLeds);
-  zPtr->position = ledsPerStrip / 2 + (random(nStrips)) * 150;
+//  zPtr->position = ledsPerStrip / 2 + (random(nStrips)) * 480;
+  zPtr->position = random(480) + random(nStrips) * 480;
   zPtr->direction = (random(2) ? 1 : -1) * speed;
   zPtr->framesLeft = nFrames / speed;
   zPtr->nFrames = nFrames / speed;
-  zPtr->length = random(1, 8);
+  zPtr->length = random(1, 12);
   zPtr->color = random(2) == 0 ? pink : orange;
 
   uint32_t r = random(100);
@@ -62,9 +63,10 @@ void newAgent() {
 
 void newMirroredAgent() {
   float speed = (random(4) + 1) / 4.0;
-  int nFrames = random(40, 80);
+  int nFrames = random(40, 240);
 
-  int position = ledsPerStrip / 2 + (random(nStrips)) * 150;
+//  int position = ledsPerStrip / 2 + (random(nStrips)) * 480;
+  int position = random(480) + random(nStrips) * 480;
   float direction = (random(2) ? 1 : -1) * speed;
   int length = random(1, 8);
   uint8_t color = random(2) == 0 ? pink : orange;

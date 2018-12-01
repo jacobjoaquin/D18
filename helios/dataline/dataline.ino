@@ -88,7 +88,7 @@ struct Agent {
 
 
 // User-defined
-const int frameRate = 60;
+const int frameRate = 24;
 
 
 // Constansts
@@ -96,8 +96,8 @@ const int frameRate = 60;
 
 //const uint8_t stripOrder[] = {0, 1, 2, 3, 7, 6, 5, 4};
 const uint8_t stripOrder[] = {3, 1, 2, 0, 4, 6, 5, 7};
-const int ledsPerStrip = 150;
-const int nStrips = 8;
+const int ledsPerStrip = 480;
+const int nStrips = 4;
 const int nLeds = ledsPerStrip * nStrips;
 const int frameDelay = 1000 / frameRate;
 
@@ -109,11 +109,11 @@ OctoWS2811 leds(ledsPerStrip, displayMemory, drawingMemory, config);
 
 // User defined variables
 uint32_t colorOrange = rgb(255, 48, 0);
-uint32_t colorMagenta = rgb(255, 0, 92);
+uint32_t colorMagenta = rgb(128, 0, 92);
 uint32_t colorBlack = rgb(0, 0, 0);
 uint32_t colorWhite = rgb(255, 255, 255);
 uint32_t colorPink = rgb(128, 0, 64);
-uint32_t colorCyan = rgb(0, 255, 255);
+uint32_t colorCyan = rgb(0, 255, 240);
 uint32_t colorYellow = rgb(255, 255, 128);
 
 const uint8_t black = 0;
@@ -123,7 +123,8 @@ const uint8_t white = 3;
 const uint8_t magenta = 4;
 const uint8_t cyan = 5;
 const uint8_t yellow = 6;
-uint32_t palette[] = {colorBlack, colorOrange, colorPink, colorWhite, colorMagenta, colorCyan, colorYellow};
+//uint32_t palette[] = {colorBlack, colorOrange, colorPink, colorWhite, colorMagenta, colorCyan, colorYellow};
+uint32_t palette[] = {colorBlack, colorCyan, colorMagenta, colorWhite, colorMagenta, colorCyan, colorYellow};
 
 
 int letterSpacing = 8;
@@ -144,7 +145,7 @@ int sanityPin = 13;
 const int nAgents = 1600;
 Agent agentList[nAgents];
 int agentLength = 5;
-int agentFrames = 40;
+int agentFrames = 80;
 int agentIndex = 0;
 
 // Timing
@@ -176,7 +177,7 @@ void loop() {
   doAgents();
 
   // Disorient
-  if (!(frame % 240)) {
+  if (!(frame % 480)) {
     cycleDisorient();
   }
 
@@ -185,7 +186,7 @@ void loop() {
 
 
   // Glitch
-  glitch();
+//  glitch();
 
   // Last
   bufferToLEDs();
